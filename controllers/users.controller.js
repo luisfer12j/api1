@@ -1,11 +1,13 @@
 const { User } = require('../models/user.model');
 
+
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll();
         res.status(200).json({ users });
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 };
 
@@ -22,48 +24,38 @@ const createUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const user = await User.findOne({ where: { id } })
-        if (!user) {
-            return res.status(404).json({ status: 'Not found', message: 'Can not find the user' })
-        }
+        const { user } = req;
 
         res.status(200).json({ user })
     } catch (error) {
         console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 
 const updateUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { user } = req;
         const { name, email } = req.body;
-
-        const user = await User.findOne({ where: { id } });
-        if (!user) {
-            return res.status(404).json({ status: 'Not found', message: 'Can not find the user' })
-        }
         await user.update({ name, email });
         await user.save();
         res.status(200).json({ status: 'success', message: 'User updated succesfully!' });
     } catch (error) {
         console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 
 const deleteUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { user } = req;
 
-        const user = await User.findOne({ where: { id } });
-        if (!user) {
-            return res.status(404).json({ status: 'Not found', message: 'Can not find the user' })
-        }
         await user.update({ status: 'disable' });
         await user.save();
         res.status(200).json({ status: 'success', message: 'User updated succesfully!' });
     } catch (error) {
         console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 

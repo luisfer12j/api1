@@ -5,7 +5,8 @@ const getAllRepairs = async (req, res) => {
         const repairs = await Repair.findAll();
         res.status(200).json({ repairs });
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 };
 
@@ -16,65 +17,43 @@ const createRepair = async (req, res) => {
         res.status(201).json({ newRepair });
     } catch (error) {
         console.log(error);
-        res.status(404).json({ status: 'Fatal error' })
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 
 const getRepairById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const repair = await Repair.findOne({ where: { id } })
-        if (!repair) {
-            return res.status(404).json({ status: 'Not found', message: 'Can not find the repair' })
-        }
-        if (repair.status === 'pending') {
-            res.status(200).json({ repair })
-        } else {
-            return res.status(404).json({ status: 'Not found', message: 'This repair is not availible' })
-        }
+        const { repair } = req;
+        res.status(200).json({ repair })
     } catch (error) {
         console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 
 const updateRepair = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        const repair = await Repair.findOne({ where: { id } });
-        if (!repair) {
-            return res.status(404).json({ status: 'Not found', message: 'Can not find the user' })
-        }
-        if (repair.status === 'pending') {
-            await repair.update({ status: 'completed' });
-            await repair.save();
-            res.status(200).json({ status: 'success', message: 'Repair completed succesfully!' });
-        } else {
-            return res.status(404).json({ status: 'Not found', message: 'This repair is not availible' })
-        }
+        const { repair } = req;
+        await repair.update({ status: 'completed' });
+        await repair.save();
+        res.status(200).json({ status: 'success', message: 'Repair completed succesfully!' });
 
     } catch (error) {
         console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 
 const deleteRepair = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { repair } = req
+        await repair.update({ status: 'cancelled' });
+        await repair.save();
+        res.status(200).json({ status: 'success', message: 'Repair cancelled succesfully!' });
 
-        const repair = await Repair.findOne({ where: { id } });
-        if (!repair) {
-            return res.status(404).json({ status: 'Not found', message: 'Can not find the repair' })
-        }
-        if (repair.status === 'pending') {
-            await repair.update({ status: 'cancelled' });
-            await repair.save();
-            res.status(200).json({ status: 'success', message: 'Repair cancelled succesfully!' });
-        } else {
-            return res.status(404).json({ status: 'Not found', message: 'This repair is not availible' })
-        }
     } catch (error) {
         console.log(error);
+        res.status(404).json({ status: 'Fatal error' });
     }
 }
 
