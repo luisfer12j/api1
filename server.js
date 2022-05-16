@@ -6,7 +6,6 @@ const { Repair } = require('./models/repair.model');
 
 const { User } = require('./models/user.model');
 
-
 //Models relations
 User.hasMany(Repair);
 Repair.belongsTo(User);

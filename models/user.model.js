@@ -24,6 +24,7 @@ const User = db.define('user', {
     role: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: 'client'
     },
     status: {
         type: DataTypes.STRING,
