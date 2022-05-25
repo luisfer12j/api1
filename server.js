@@ -12,11 +12,11 @@ Repair.belongsTo(User);
 //User.hasMany(Repair, {foreignKey: 'theNameOfTheForeignKey'});   If used another name to foreign key
 
 db.authenticate()
-    .then(() => console.log('DataBase authenticated succesfully'))
+    .then(() => console.log('DataBase authenticated successfully'))
     .catch(error => console.log(error));
 
 db.sync()
-    .then(() => console.log('DataBase sync succesfully'))
+    .then(() => console.log('DataBase sync successfully'))
     .catch(error => console.log(error));
 
 
